@@ -12,6 +12,7 @@ public class RateMyWineContext : DbContext, IRateMyWineContext
     public DbSet<Manufacturer> Manufacturers => Set<Manufacturer>();
 
     public RateMyWineContext() : base(){}
+
     public RateMyWineContext(DbContextOptions<RateMyWineContext> options)
     : base(options)
     {
