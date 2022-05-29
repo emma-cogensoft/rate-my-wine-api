@@ -11,6 +11,7 @@ public class RateMyWineContext : DbContext, IRateMyWineContext
     public DbSet<Beverage> Beverages => Set<Beverage>();
     public DbSet<Manufacturer> Manufacturers => Set<Manufacturer>();
 
+    public RateMyWineContext() : base(){}
     public RateMyWineContext(DbContextOptions<RateMyWineContext> options)
     : base(options)
     {
@@ -29,7 +30,7 @@ public class RateMyWineContext : DbContext, IRateMyWineContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(
-            @"Server=(localdb)\mssqllocaldb;Database=RateMyIWine;Trusted_Connection=True");
+        optionsBuilder.UseMySql(
+            @"Database=RateMyWine", new MySqlServerVersion(new Version(8, 0, 27)));
     }
 }

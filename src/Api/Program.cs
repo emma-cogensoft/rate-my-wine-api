@@ -32,8 +32,9 @@ public static class Program
     
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
         services.AddDbContext<RateMyWineContext>(
-            options => options.UseSqlServer("name=ConnectionStrings:ApplicationContext"));
+            options => options.UseMySql("name=ConnectionStrings:DefaultConnection", serverVersion));
 
         services.AddScoped<IRateMyWineContext, RateMyWineContext>();
 
