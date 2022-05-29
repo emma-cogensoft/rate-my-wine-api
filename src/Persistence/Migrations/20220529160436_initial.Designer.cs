@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,14 +11,16 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(RateMyWineContext))]
-    partial class RateMyWineContextModelSnapshot : ModelSnapshot
+    [Migration("20220529160436_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
             modelBuilder.Entity("Domain.Entities.Beverage", b =>
                 {
                     b.Property<int>("Id")
