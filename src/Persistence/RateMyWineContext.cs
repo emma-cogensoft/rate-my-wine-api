@@ -22,16 +22,4 @@ public class RateMyWineContext : DbContext, IRateMyWineContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
-    {
-         return base.SaveChangesAsync(cancellationToken);
-    }
-
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseMySql(
-            @"Database=RateMyWine", new MySqlServerVersion(new Version(8, 0, 27)));
-    }
 }

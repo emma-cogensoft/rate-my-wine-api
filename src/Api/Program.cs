@@ -13,6 +13,8 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Configuration.AddJsonFile("appsettings.development.json", true);
+        
         ConfigureServices(builder.Services, builder.Configuration);
 
         var app = builder.Build();
@@ -41,8 +43,9 @@ public static class Program
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<RateMyWineContext>(
-            options => options.UseMySql("name=ConnectionStrings:DefaultConnection", serverVersion));
+            options => options.UseMySql(connectionString, serverVersion));
 
         services.AddScoped<IRateMyWineContext, RateMyWineContext>();
 
