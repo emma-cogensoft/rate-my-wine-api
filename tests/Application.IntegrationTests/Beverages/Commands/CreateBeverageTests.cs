@@ -1,16 +1,16 @@
-﻿using Application.Manufacturers.Commands.Create;
+﻿using Application.Beverages.Commands;
 using Domain.Entities;
 using FluentAssertions;
 using FluentValidation;
 
-namespace ApiTests.Manufacturers.Commands;
+namespace ApiTests.Beverages.Commands;
 
 [Collection("Test fixture collection")]
-public class CreateManufacturerTests
+public class CreateBeverageTests
 {
     private readonly TestFixture _testFixture;
 
-    public CreateManufacturerTests(TestFixture testFixture)
+    public CreateBeverageTests(TestFixture testFixture)
     {
         _testFixture = testFixture;
     }
@@ -18,26 +18,26 @@ public class CreateManufacturerTests
     [Fact]
     public async Task ShouldRequireMinimumFields()
     {
-        var command = new CreateManufacturerCommand();
+        var command = new CreateBeverageCommand();
 
         await FluentActions.Invoking(() =>
             _testFixture.SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
 
     [Fact]
-    public async Task ShouldCreateManufacturer()
+    public async Task ShouldCreateBeverage()
     {
         // Arrange
-        var command = new CreateManufacturerCommand
+        var command = new CreateBeverageCommand
         {
-            Name = "New Manufacturer"
+            Name = "New Beverage"
         };
 
         // Act
         var result = await _testFixture.SendAsync(command);
 
         // Assert
-        var item = await _testFixture.FindAsync<Manufacturer>(result.Id);
+        var item = await _testFixture.FindAsync<Beverage>(result.Id);
 
         item.Should().NotBeNull();
         item!.Name.Should().Be(command.Name);

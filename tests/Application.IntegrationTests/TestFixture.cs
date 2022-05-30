@@ -39,7 +39,7 @@ public class TestFixture : IDisposable
         EnsureDatabase();
     }
 
-    public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
+    public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
     {
         using var scope = _scopeFactory.CreateScope();
 
@@ -48,7 +48,7 @@ public class TestFixture : IDisposable
         return await mediator.Send(request);
     }
 
-    public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
+    public async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
         where TEntity : class
     {
         using var scope = _scopeFactory.CreateScope();
@@ -58,7 +58,7 @@ public class TestFixture : IDisposable
         return await context.FindAsync<TEntity>(keyValues);
     }
 
-    public static async Task AddAsync<TEntity>(TEntity entity)
+    public async Task AddAsync<TEntity>(TEntity entity)
         where TEntity : class
     {
         using var scope = _scopeFactory.CreateScope();
@@ -70,7 +70,7 @@ public class TestFixture : IDisposable
         await context.SaveChangesAsync();
     }
 
-    public static async Task<int> CountAsync<TEntity>() where TEntity : class
+    public async Task<int> CountAsync<TEntity>() where TEntity : class
     {
         using var scope = _scopeFactory.CreateScope();
 
@@ -88,12 +88,21 @@ public class TestFixture : IDisposable
         context.Database.EnsureDeleted();
     }
     
-    private static void EnsureDatabase()
+    private void EnsureDatabase()
     {
         using var scope = _scopeFactory.CreateScope();
 
         var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
 
+        context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
+    }
+    
+    [CollectionDefinition("Test fixture collection")]
+    public class DatabaseCollection : ICollectionFixture<TestFixture>
+    {
+        // This class has no code, and is never created. Its purpose is simply
+        // to be the place to apply [CollectionDefinition] and all the
+        // ICollectionFixture<> interfaces.
     }
 }

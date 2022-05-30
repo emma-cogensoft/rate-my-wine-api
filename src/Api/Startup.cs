@@ -1,5 +1,8 @@
-﻿using Api.Controllers;
+﻿using System.Reflection;
+using Api.Controllers;
 using Application;
+using Application.Behaviours;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -29,6 +32,8 @@ public class Startup
                 options => options.UseSqlite(connectionString));
         }
 
+        services.AddValidatorsFromAssembly(typeof(IRateMyWineContext).Assembly);
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         services.AddScoped<IRateMyWineContext, RateMyWineContext>();
 
         services.AddControllers();
@@ -36,7 +41,7 @@ public class Startup
         services.AddSwaggerGen();
 
         services.AddAutoMapper(typeof(IRateMyWineContext).Assembly);
-        services.AddAutoMapper(typeof(BeveragesController).Assembly);
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMediatR(typeof(IRateMyWineContext));
     }
 
