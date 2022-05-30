@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using MediatR;
 
-namespace Application.Manufacturers.Commands;
+namespace Application.Manufacturers.Commands.Create;
 
 public class CreateManufacturerCommand : IRequest<Manufacturer>
 {

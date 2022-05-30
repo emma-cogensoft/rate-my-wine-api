@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Manufacturers.Commands;
+namespace Application.Manufacturers.Commands.Create;
 
 public class CreateManufacturerHandler : IRequestHandler<CreateManufacturerCommand, Manufacturer>
 {

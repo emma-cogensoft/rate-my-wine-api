@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Manufacturers.Commands;
+namespace Application.Manufacturers.Commands.Delete;
 
 public class DeleteManufacturerCommand : IRequest
 {

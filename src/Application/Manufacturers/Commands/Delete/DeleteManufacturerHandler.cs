@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Manufacturers.Commands;
+namespace Application.Manufacturers.Commands.Delete;
 
 public class DeleteManufacturerHandler : IRequestHandler<DeleteManufacturerCommand>
 {

@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using MediatR;
 
-namespace Application.Manufacturers.Commands;
+namespace Application.Manufacturers.Commands.Update;
 
 public class UpdateManufacturerCommand : IRequest<Manufacturer>
 {
