@@ -1,4 +1,3 @@
-using Api.Requests;
 using Application;
 using Application.Beverages.Commands;
 using Application.Beverages.Queries;
@@ -46,20 +45,18 @@ namespace Api.Controllers
         }
 
         // PUT: api/Beverages/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBeverage(int id, UpdateBeverageRequest request)
+        public async Task<IActionResult> PutBeverage(int id, UpdateBeverageCommand command)
         {
-            await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(request));
+            await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(command));
             return NoContent();
         }
 
         // POST: api/Beverages
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Beverage>> PostBeverage(CreateBeverageRequest request)
+        public async Task<ActionResult<Beverage>> PostBeverage(CreateBeverageCommand command)
         {
-            var beverage = await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(request));
+            var beverage = await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(command));
 
             return CreatedAtAction("GetBeverage", new { id = beverage.Id }, beverage);
         }

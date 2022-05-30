@@ -1,7 +1,9 @@
-using Api.Requests;
 using Application;
-using Application.Manufacturers.Commands;
-using Application.Manufacturers.Queries;
+using Application.Manufacturers.Commands.Create;
+using Application.Manufacturers.Commands.Delete;
+using Application.Manufacturers.Commands.Update;
+using Application.Manufacturers.Queries.GetById;
+using Application.Manufacturers.Queries.GetList;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -27,7 +29,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Manufacturer>>> GetManufacturers()
         {
-            var manufacturers = await _mediatr.Send(new GetAllManufacturersQuery());
+            var manufacturers = await _mediatr.Send(new GetManufacturersListQuery());
             return manufacturers.ToList();
 
         }
@@ -48,21 +50,23 @@ namespace Api.Controllers
         }
 
         // PUT: api/Manufacturers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutManufacturer(int id, UpdateManufacturerRequest request)
+        public async Task<IActionResult> UpdateManufacturer(int id, UpdateManufacturerCommand command)
         {
-            await _mediatr.Send(_mapper.Map<CreateManufacturerCommand>(request));
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            
+            await _mediatr.Send(command);
             return NoContent();
         }
 
         // POST: api/Manufacturers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Manufacturer>> PostManufacturer(CreateManufacturerRequest request)
+        public async Task<ActionResult<Manufacturer>> AddManufacturer(CreateManufacturerCommand command)
         {
-            var manufacturer = await _mediatr.Send(_mapper.Map<CreateManufacturerCommand>(request));
-
+            var manufacturer = await _mediatr.Send(command);
             return CreatedAtAction("GetManufacturer", new { id = manufacturer.Id }, manufacturer);
         }
 
