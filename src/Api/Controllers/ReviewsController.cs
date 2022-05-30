@@ -1,4 +1,3 @@
-using Api.Requests;
 using Application;
 using Application.Reviews.Commands;
 using Application.Reviews.Queries;
@@ -48,20 +47,18 @@ namespace Api.Controllers
         }
 
         // PUT: api/Reviews/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(int id, UpdateReviewRequest request)
+        public async Task<IActionResult> PutReview(int id, UpdateReviewCommand command)
         {
-            await _mediatr.Send(_mapper.Map<CreateReviewCommand>(request));
+            await _mediatr.Send(_mapper.Map<CreateReviewCommand>(command));
             return NoContent();
         }
 
         // POST: api/Reviews
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Review>> PostReview(CreateReviewRequest request)
+        public async Task<ActionResult<Review>> PostReview(CreateReviewCommand command)
         {
-            var review = await _mediatr.Send(_mapper.Map<CreateReviewCommand>(request));
+            var review = await _mediatr.Send(_mapper.Map<CreateReviewCommand>(command));
 
             return CreatedAtAction("GetReview", new { id = review.Id }, review);
         }

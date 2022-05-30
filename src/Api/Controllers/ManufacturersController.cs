@@ -1,4 +1,3 @@
-using Api.Requests;
 using Application;
 using Application.Manufacturers.Commands;
 using Application.Manufacturers.Queries;
@@ -48,20 +47,18 @@ namespace Api.Controllers
         }
 
         // PUT: api/Manufacturers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutManufacturer(int id, UpdateManufacturerRequest request)
+        public async Task<IActionResult> PutManufacturer(int id, UpdateManufacturerCommand command)
         {
-            await _mediatr.Send(_mapper.Map<CreateManufacturerCommand>(request));
+            await _mediatr.Send(command);
             return NoContent();
         }
 
         // POST: api/Manufacturers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Manufacturer>> PostManufacturer(CreateManufacturerRequest request)
+        public async Task<ActionResult<Manufacturer>> PostManufacturer(CreateManufacturerCommand command)
         {
-            var manufacturer = await _mediatr.Send(_mapper.Map<CreateManufacturerCommand>(request));
+            var manufacturer = await _mediatr.Send(command);
 
             return CreatedAtAction("GetManufacturer", new { id = manufacturer.Id }, manufacturer);
         }
