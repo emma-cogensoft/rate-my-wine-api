@@ -10,6 +10,7 @@ env:
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: src\Api
   TEST_DIRECTORY: tests
+  TEST_PROJECT1: Application.IntegrationTests"
 jobs:
   build:
     runs-on: windows-latest
@@ -24,7 +25,7 @@ jobs:
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
-      run: dotnet test "${{ env.TEST_DIRECTORY }}" --no-build
+      run: dotnet test "${{ env.TEST_DIRECTORY }}\{{ env.TESTPROJECT1}} --no-build
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Deploy to Azure WebApp
