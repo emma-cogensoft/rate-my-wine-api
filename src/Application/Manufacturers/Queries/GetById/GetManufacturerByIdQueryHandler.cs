@@ -4,12 +4,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Manufacturers.Queries.GetById;
 
-public class GetManufacturerByIdCommandHandler : IRequestHandler<GetManufacturerByIdQuery, Manufacturer>
+public class GetManufacturerByIdQueryHandler : IRequestHandler<GetManufacturerByIdQuery, Manufacturer>
 {
     private readonly IRateMyWineContext _context;
-    private readonly ILogger<GetManufacturerByIdCommandHandler> _logger;
+    private readonly ILogger<GetManufacturerByIdQueryHandler> _logger;
 
-    public GetManufacturerByIdCommandHandler(IRateMyWineContext context, ILogger<GetManufacturerByIdCommandHandler> logger)
+    public GetManufacturerByIdQueryHandler(IRateMyWineContext context, ILogger<GetManufacturerByIdQueryHandler> logger)
     {
         _context = context;
         _logger = logger;
