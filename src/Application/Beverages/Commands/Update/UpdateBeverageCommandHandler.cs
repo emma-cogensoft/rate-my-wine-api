@@ -24,6 +24,7 @@ public class UpdateBeverageCommandHandler: IRequestHandler<UpdateBeverageCommand
             throw new EntityNotFoundException();
         }
         
+        beverage.ManufacturerId = command.ManufacturerId;
         beverage.Name = command.Name;
 
         await _context.SaveChangesAsync(cancellationToken);

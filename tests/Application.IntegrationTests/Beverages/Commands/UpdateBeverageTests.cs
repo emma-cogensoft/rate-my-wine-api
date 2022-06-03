@@ -31,12 +31,14 @@ public class UpdateBeverageTests
         // Arrange
         var created = await _testFixture.SendAsync(new CreateBeverageCommand
         {
+            ManufacturerId = 1,
             Name = "New Beverage"
         });
 
         var command = new UpdateBeverageCommand
         {
             Id = created.Id,
+            ManufacturerId = created.ManufacturerId,
             Name = "Updated beverage name"
         };
 

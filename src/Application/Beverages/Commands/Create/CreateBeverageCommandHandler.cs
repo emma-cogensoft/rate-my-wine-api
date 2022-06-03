@@ -19,6 +19,7 @@ public class CreateBeverageCommandHandler : IRequestHandler<CreateBeverageComman
     {
         var beverage = new Beverage
         {
+            ManufacturerId = command.ManufacturerId,
             Name = command.Name
         };
 

@@ -19,10 +19,9 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
     {
         var review = new Review
         {
-          
+            BeverageId = command.BeverageId,
             Rating = command.Rating,
             ReviewText = command.ReviewText,
-            Beverage = command.Beverage,
             UserId = command.UserId
         };
 

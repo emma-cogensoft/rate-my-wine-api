@@ -30,6 +30,7 @@ public class CreateBeverageTests
         // Arrange
         var command = new CreateBeverageCommand
         {
+            ManufacturerId = 1,
             Name = "New Beverage"
         };
 
@@ -41,5 +42,6 @@ public class CreateBeverageTests
 
         item.Should().NotBeNull();
         item!.Name.Should().Be(command.Name);
+        item.ManufacturerId.Should().Be(command.ManufacturerId);
     }
 }

@@ -32,6 +32,7 @@ public class UpdateReviewTests
         // Arrange
         var created = await _testFixture.SendAsync(new CreateReviewCommand
         {
+            BeverageId = 1,
             Rating = new Rating(2),
             ReviewText = "This is some review text"
         });
@@ -39,6 +40,7 @@ public class UpdateReviewTests
         var command = new UpdateReviewCommand
         {
             Id = created.Id,
+            BeverageId = 1,
             Rating = new Rating(4),
             ReviewText = "This is some review text which has been updated"
         };
@@ -52,5 +54,6 @@ public class UpdateReviewTests
         item.Should().NotBeNull();
         item!.Rating.Should().Be(command.Rating);
         item.ReviewText.Should().Be(command.ReviewText);
+        item.BeverageId.Should().Be(command.BeverageId);
     }
 }

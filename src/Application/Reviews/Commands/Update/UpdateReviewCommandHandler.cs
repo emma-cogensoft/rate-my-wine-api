@@ -24,9 +24,9 @@ public class UpdateReviewCommandHandler: IRequestHandler<UpdateReviewCommand, Re
             throw new EntityNotFoundException();
         }
         
+        review.BeverageId = command.BeverageId;
         review.Rating = command.Rating;
         review.ReviewText = command.ReviewText;
-        review.Beverage = command.Beverage;
         review.UserId = command.UserId;
 
         await _context.SaveChangesAsync(cancellationToken);

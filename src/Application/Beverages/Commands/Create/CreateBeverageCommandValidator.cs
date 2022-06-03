@@ -9,5 +9,9 @@ public class CreateBeverageCommandValidator : AbstractValidator<CreateBeverageCo
         RuleFor(v => v.Name)
             .MaximumLength(200)
             .NotEmpty();
+                
+        RuleFor(v => v.ManufacturerId)
+            .NotEmpty();
+
     }
 }

@@ -9,6 +9,9 @@ public class UpdateReviewCommandValidator : AbstractValidator<UpdateReviewComman
         RuleFor(v => v.Id)
             .NotEmpty();
         
+        RuleFor(v => v.BeverageId)
+            .NotEmpty();
+        
         RuleFor(v => v.Rating.Value)
             .InclusiveBetween(0, 5)
             .NotEmpty();

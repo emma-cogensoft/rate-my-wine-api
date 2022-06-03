@@ -6,6 +6,9 @@ public class CreateReviewCommandValidator : AbstractValidator<CreateReviewComman
 {
     public CreateReviewCommandValidator()
     {
+        RuleFor(v => v.BeverageId)
+            .NotEmpty();
+        
         RuleFor(v => v.Rating.Value)
             .InclusiveBetween(0, 5)
             .NotEmpty();

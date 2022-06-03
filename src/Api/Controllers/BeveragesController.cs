@@ -34,7 +34,7 @@ namespace Api.Controllers
 
         // GET: api/Beverages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Beverage>> GetBeverage(int id)
+        public async Task<ActionResult<BeverageDetailVm>> GetBeverage(int id)
         {
             try
             {
