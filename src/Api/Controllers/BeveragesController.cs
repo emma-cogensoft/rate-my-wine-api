@@ -1,9 +1,7 @@
 using Application;
-using Application.Beverages.Commands;
 using Application.Beverages.Commands.Create;
 using Application.Beverages.Commands.Delete;
 using Application.Beverages.Commands.Update;
-using Application.Beverages.Queries;
 using Application.Beverages.Queries.GetById;
 using Application.Beverages.Queries.GetList;
 using AutoMapper;

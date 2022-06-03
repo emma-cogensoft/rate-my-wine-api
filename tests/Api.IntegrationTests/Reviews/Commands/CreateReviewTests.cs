@@ -1,5 +1,4 @@
-﻿using Application.Reviews.Commands;
-using Application.Reviews.Commands.Create;
+﻿using Application.Reviews.Commands.Create;
 using Domain.Entities;
 using Domain.ValueObjects;
 using FluentAssertions;

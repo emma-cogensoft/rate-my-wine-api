@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Api.Controllers;
 using Application;
 using Application.Behaviours;
 using FluentValidation;

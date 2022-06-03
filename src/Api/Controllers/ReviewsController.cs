@@ -1,9 +1,7 @@
 using Application;
-using Application.Reviews.Commands;
 using Application.Reviews.Commands.Create;
 using Application.Reviews.Commands.Delete;
 using Application.Reviews.Commands.Update;
-using Application.Reviews.Queries;
 using Application.Reviews.Queries.GetById;
 using Application.Reviews.Queries.GetList;
 using AutoMapper;
