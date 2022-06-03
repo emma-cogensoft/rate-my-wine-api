@@ -1,4 +1,6 @@
 ﻿using Application.Beverages.Commands;
+using Application.Beverages.Commands.Create;
+using Application.Beverages.Commands.Update;
 using Domain.Entities;
 using FluentAssertions;
 using FluentValidation;

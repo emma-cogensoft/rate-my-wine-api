@@ -1,6 +1,11 @@
 using Application;
 using Application.Reviews.Commands;
+using Application.Reviews.Commands.Create;
+using Application.Reviews.Commands.Delete;
+using Application.Reviews.Commands.Update;
 using Application.Reviews.Queries;
+using Application.Reviews.Queries.GetById;
+using Application.Reviews.Queries.GetList;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -26,7 +31,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
         {
-            var reviews = await _mediatr.Send(new GetAllReviewsQuery());
+            var reviews = await _mediatr.Send(new GetListReviewsQuery());
             return reviews.ToList();
 
         }

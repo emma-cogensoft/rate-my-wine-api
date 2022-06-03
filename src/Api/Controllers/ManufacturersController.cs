@@ -29,7 +29,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Manufacturer>>> GetManufacturers()
         {
-            var manufacturers = await _mediatr.Send(new GetManufacturersListQuery());
+            var manufacturers = await _mediatr.Send(new GetListManufacturersQuery());
             return manufacturers.ToList();
 
         }
