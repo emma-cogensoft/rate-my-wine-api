@@ -4,7 +4,6 @@ using Application.Reviews.Commands.Delete;
 using Application.Reviews.Commands.Update;
 using Application.Reviews.Queries.GetById;
 using Application.Reviews.Queries.GetList;
-using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +16,10 @@ namespace Api.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly IMediator _mediatr;
-        private readonly IMapper _mapper;
 
-        public ReviewsController(IMediator mediatr, IMapper mapper)
+        public ReviewsController(IMediator mediatr)
         {
             _mediatr = mediatr;
-            _mapper = mapper;
         }
 
         // GET: api/Reviews
@@ -40,7 +37,7 @@ namespace Api.Controllers
         {
             try
             {
-                var review = await _mediatr.Send(_mapper.Map<GetReviewByIdQuery>(id));
+                var review = await _mediatr.Send(new GetReviewByIdQuery(id));
                 return review;
             }
             catch (EntityNotFoundException)
@@ -53,7 +50,7 @@ namespace Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReview(int id, UpdateReviewCommand command)
         {
-            await _mediatr.Send(_mapper.Map<CreateReviewCommand>(command));
+            await _mediatr.Send(command);
             return NoContent();
         }
 
@@ -61,8 +58,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(CreateReviewCommand command)
         {
-            var review = await _mediatr.Send(_mapper.Map<CreateReviewCommand>(command));
-
+            var review = await _mediatr.Send(command);
             return CreatedAtAction("GetReview", new { id = review.Id }, review);
         }
 
@@ -72,7 +68,7 @@ namespace Api.Controllers
         {
             try
             {
-                await _mediatr.Send(_mapper.Map<DeleteReviewCommand>(id));
+                await _mediatr.Send(new DeleteReviewCommand(id));
             }
             catch (EntityNotFoundException)
             {

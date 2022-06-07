@@ -13,6 +13,7 @@ public class BeverageDetailVm : IMapFrom<Beverage>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Beverage, BeverageDetailVm>()
-            .ForMember(m => m.ManufacturerName, d => d.MapFrom(b => b.Manufacturer != null ? b.Manufacturer!.Name : ""));
+            .ForMember(m => m.ManufacturerName, d => d.MapFrom(b => b.Manufacturer != null ? b.Manufacturer!.Name : ""))
+            .ForMember(m => m.BeverageId, d => d.MapFrom(b => b.Id));
     }
 }

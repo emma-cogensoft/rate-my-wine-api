@@ -4,7 +4,6 @@ using Application.Manufacturers.Commands.Delete;
 using Application.Manufacturers.Commands.Update;
 using Application.Manufacturers.Queries.GetById;
 using Application.Manufacturers.Queries.GetList;
-using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +16,10 @@ namespace Api.Controllers
     public class ManufacturersController : ControllerBase
     {
         private readonly IMediator _mediatr;
-        private readonly IMapper _mapper;
 
-        public ManufacturersController(IMediator mediatr, IMapper mapper)
+        public ManufacturersController(IMediator mediatr)
         {
             _mediatr = mediatr;
-            _mapper = mapper;
         }
 
         // GET: api/Manufacturers
@@ -40,7 +37,7 @@ namespace Api.Controllers
         {
             try
             {
-                var manufacturer = await _mediatr.Send(_mapper.Map<GetManufacturerByIdQuery>(id));
+                var manufacturer = await _mediatr.Send(new GetManufacturerByIdQuery(id));
                 return manufacturer;
             }
             catch (EntityNotFoundException)
@@ -66,8 +63,8 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Manufacturer>> AddManufacturer(CreateManufacturerCommand command)
         {
-            var manufacturer = await _mediatr.Send(command);
-            return CreatedAtAction("GetManufacturer", new { id = manufacturer.Id }, manufacturer);
+            var manufacturerId = await _mediatr.Send(command);
+            return CreatedAtAction("GetManufacturer", new { id = manufacturerId });
         }
 
         // DELETE: api/Manufacturers/5
@@ -76,7 +73,7 @@ namespace Api.Controllers
         {
             try
             {
-                await _mediatr.Send(_mapper.Map<DeleteManufacturerCommand>(id));
+                await _mediatr.Send(new DeleteManufacturerCommand(id));
             }
             catch (EntityNotFoundException)
             {

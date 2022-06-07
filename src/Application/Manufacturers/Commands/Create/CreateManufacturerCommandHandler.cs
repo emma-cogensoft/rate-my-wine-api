@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Manufacturers.Commands.Create;
 
-public class CreateManufacturerCommandHandler : IRequestHandler<CreateManufacturerCommand, Manufacturer>
+public class CreateManufacturerCommandHandler : IRequestHandler<CreateManufacturerCommand, int>
 {
     private readonly IRateMyWineContext _context;
     private readonly ILogger<CreateManufacturerCommandHandler> _logger;
@@ -15,7 +15,7 @@ public class CreateManufacturerCommandHandler : IRequestHandler<CreateManufactur
         _logger = logger;
     }
 
-    public async Task<Manufacturer> Handle(CreateManufacturerCommand command, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateManufacturerCommand command, CancellationToken cancellationToken)
     {
         var manufacturer = new Manufacturer
         {
@@ -25,6 +25,6 @@ public class CreateManufacturerCommandHandler : IRequestHandler<CreateManufactur
         _context.Manufacturers.Add(manufacturer);
         
         await _context.SaveChangesAsync(cancellationToken);
-        return manufacturer;
+        return manufacturer.Id;
     }
 }

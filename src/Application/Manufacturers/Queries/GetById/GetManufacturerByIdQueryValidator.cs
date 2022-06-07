@@ -6,6 +6,8 @@ public class GetManufacturerByIdQueryValidator : AbstractValidator<GetManufactur
 {
     public GetManufacturerByIdQueryValidator()
     {
-        RuleFor(v => v.Id).NotEmpty();
+        RuleFor(v => v.Id)
+            .NotEmpty()
+            .GreaterThan(0);
     }
 }

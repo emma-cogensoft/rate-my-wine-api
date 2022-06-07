@@ -1,9 +1,8 @@
-﻿using Domain.Entities;
-using MediatR;
+﻿using MediatR;
 
 namespace Application.Manufacturers.Commands.Create;
 
-public class CreateManufacturerCommand : IRequest<Manufacturer>
+public class CreateManufacturerCommand : IRequest<int>
 {
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
 }

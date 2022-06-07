@@ -1,6 +1,4 @@
 ﻿using Api;
-using Application.Mappings;
-using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
@@ -98,9 +96,14 @@ public class TestFixture : IDisposable
 
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
+        
         var manufacturer = context.Manufacturers.Add(new Manufacturer { Name = "Test Manufacturer" });
         context.SaveChanges();
-        context.Beverages.Add(new Beverage { ManufacturerId = manufacturer.Entity.Id, Name = "Test Beverage" });
+        
+        var beverage = context.Beverages.Add(new Beverage { ManufacturerId = manufacturer.Entity.Id, Name = "Test Beverage" });
+        context.SaveChanges();
+        
+        context.Reviews.Add(new Review { Rating = 3, BeverageId = beverage.Entity.Id, ReviewText = "Some review text"});
         context.SaveChanges();
     }
     

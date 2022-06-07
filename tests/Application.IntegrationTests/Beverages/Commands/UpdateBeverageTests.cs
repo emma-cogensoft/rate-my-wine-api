@@ -3,7 +3,6 @@ using Application.Beverages.Commands.Update;
 using Domain.Entities;
 using FluentAssertions;
 using FluentValidation;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ApiTests.Beverages.Commands;
 

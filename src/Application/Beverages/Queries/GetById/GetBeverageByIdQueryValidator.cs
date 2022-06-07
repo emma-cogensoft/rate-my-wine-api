@@ -7,6 +7,7 @@ public class GetBeverageByIdQueryValidator : AbstractValidator<GetBeverageByIdQu
     public GetBeverageByIdQueryValidator()
     {
         RuleFor(v => v.Id)
-            .NotEmpty();
+            .NotEmpty()
+            .GreaterThan(0);
     }
 }

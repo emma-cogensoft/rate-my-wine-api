@@ -7,6 +7,7 @@ public class GetReviewByIdQueryValidator : AbstractValidator<GetReviewByIdQuery>
     public GetReviewByIdQueryValidator()
     {
         RuleFor(v => v.Id)
-            .NotEmpty();
+            .NotEmpty()
+            .GreaterThan(0);
     }
 }

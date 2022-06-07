@@ -3,7 +3,6 @@ using Domain.Entities;
 using Domain.ValueObjects;
 using FluentAssertions;
 using FluentValidation;
-using SQLitePCL;
 
 namespace ApiTests.Reviews.Commands;
 
