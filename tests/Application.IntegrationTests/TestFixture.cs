@@ -1,4 +1,6 @@
 ﻿using Api;
+using Application.Mappings;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
@@ -20,20 +22,19 @@ public class TestFixture : IDisposable
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", true, true)
             .AddEnvironmentVariables();
-
-        var configuration = builder.Build();
-
-        var startup = new Startup(configuration);
-
+        
         var services = new ServiceCollection();
-
+        
         services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
             w.EnvironmentName == "Development" &&
             w.ApplicationName == "Api"));
 
         services.AddLogging();
 
+        var configuration = builder.Build();
+        var startup = new Startup(configuration);
         startup.ConfigureServices(services);
+        
 
         _scopeFactory = services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>();
 

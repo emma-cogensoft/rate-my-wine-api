@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Beverages.Commands.Create;
 
-public class CreateBeverageCommandHandler : IRequestHandler<CreateBeverageCommand, Beverage>
+public class CreateBeverageCommandHandler : IRequestHandler<CreateBeverageCommand, int>
 {
     private readonly IRateMyWineContext _context;
     private readonly ILogger<CreateBeverageCommandHandler> _logger;
@@ -15,7 +15,7 @@ public class CreateBeverageCommandHandler : IRequestHandler<CreateBeverageComman
         _logger = logger;
     }
 
-    public async Task<Beverage> Handle(CreateBeverageCommand command, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateBeverageCommand command, CancellationToken cancellationToken)
     {
         var beverage = new Beverage
         {
@@ -26,6 +26,7 @@ public class CreateBeverageCommandHandler : IRequestHandler<CreateBeverageComman
         _context.Beverages.Add(beverage);
         
         await _context.SaveChangesAsync(cancellationToken);
-        return beverage;
+
+        return beverage.Id;
     }
 }

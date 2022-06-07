@@ -1,56 +1,56 @@
 ﻿using Application.Beverages.Commands.Create;
-using Application.Beverages.Commands.Update;
+using Application.Beverages.Queries.GetById;
 using Domain.Entities;
 using FluentAssertions;
 using FluentValidation;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ApiTests.Beverages.Commands;
 
 [Collection("Test fixture collection")]
-public class UpdateBeverageTests
+public class GetBeverageByIdTests
 {
     private readonly TestFixture _testFixture;
 
-    public UpdateBeverageTests(TestFixture testFixture)
+    public GetBeverageByIdTests(TestFixture testFixture)
     {
         _testFixture = testFixture;
     }
-    
+
     [Fact]
     public async Task ShouldRequireMinimumFields()
     {
-        var command = new UpdateBeverageCommand();
+        var command = new GetBeverageByIdQuery();
 
         await FluentActions.Invoking(() =>
             _testFixture.SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
-    
+
     [Fact]
-    public async Task ShouldUpdateBeverage()
+    public async Task ShouldGetBeverageById()
     {
         // Arrange
+        var beverageName = "New Beverage";
         var manufacturerId = 1;
+        var expectedManufacturer = await _testFixture.FindAsync<Manufacturer>(manufacturerId);
+        Assert.NotNull(expectedManufacturer);
+        
         var createdId = await _testFixture.SendAsync(new CreateBeverageCommand
         {
             ManufacturerId = manufacturerId,
-            Name = "New Beverage"
+            Name = beverageName
         });
 
-        var command = new UpdateBeverageCommand
+        var query = new GetBeverageByIdQuery
         {
-            Id = createdId,
-            ManufacturerId = manufacturerId,
-            Name = "Updated beverage name"
+            Id = createdId
         };
 
         // Act
-        await _testFixture.SendAsync(command);
+        var item = await _testFixture.SendAsync(query);
 
         // Assert
-        var item = await _testFixture.FindAsync<Beverage>(command.Id);
-
         item.Should().NotBeNull();
-        item!.Name.Should().Be(command.Name);
+        item!.Name.Should().Be(beverageName);
+        item.ManufacturerName.Should().Be(expectedManufacturer!.Name);
     }
 }

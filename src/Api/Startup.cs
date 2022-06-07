@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using Application;
 using Application.Behaviours;
+using Application.Mappings;
+using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -39,8 +41,16 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        services.AddAutoMapper(typeof(IRateMyWineContext).Assembly);
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        // services.AddAutoMapper(typeof(IRateMyWineContext).Assembly);
+        // services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        var configurationProvider = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
+        var mapper = configurationProvider.CreateMapper();
+        services.AddSingleton(mapper);
+        
         services.AddMediatR(typeof(IRateMyWineContext));
     }
 

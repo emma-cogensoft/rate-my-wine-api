@@ -21,10 +21,11 @@ public class GetBeverageByIdQueryHandler : IRequestHandler<GetBeverageByIdQuery,
 
     public async Task<BeverageDetailVm> Handle(GetBeverageByIdQuery query, CancellationToken cancellationToken)
     {
-        var beverage = await _context.Beverages
-            .Include(e => e.Manufacturer)
+        var beverage = await _context
+            .Beverages.Include(e => e.Manufacturer)
+            .Where(e => query.Id == e.Id)
             .ProjectTo<BeverageDetailVm>(_mapper.ConfigurationProvider)
-            .SingleOrDefaultAsync(e => query.Id == e.BeverageId, cancellationToken);
+            .SingleOrDefaultAsync(cancellationToken);
 
         if (beverage == default)
         {

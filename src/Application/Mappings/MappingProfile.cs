@@ -10,7 +10,7 @@ public class MappingProfile : Profile
         ApplyMappingsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
-    private void ApplyMappingsFromAssembly(Assembly assembly)
+    private void ApplyMappingsFromAssembly(Assembly assembly) 
     {
         var types = assembly.GetExportedTypes()
             .Where(t => t.GetInterfaces().Any(i => 

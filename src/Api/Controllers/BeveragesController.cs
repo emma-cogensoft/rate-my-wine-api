@@ -59,9 +59,9 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Beverage>> PostBeverage(CreateBeverageCommand command)
         {
-            var beverage = await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(command));
+            var beverageId = await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(command));
 
-            return CreatedAtAction("GetBeverage", new { id = beverage.Id }, beverage);
+            return CreatedAtAction("GetBeverage", new { id = beverageId });
         }
 
         // DELETE: api/Beverages/5
