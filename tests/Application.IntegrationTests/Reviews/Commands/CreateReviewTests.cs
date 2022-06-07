@@ -1,4 +1,4 @@
-﻿using Application.Reviews.Commands;
+﻿using Application.Reviews.Commands.Create;
 using Domain.Entities;
 using Domain.ValueObjects;
 using FluentAssertions;
@@ -31,6 +31,7 @@ public class CreateReviewTests
         // Arrange
         var command = new CreateReviewCommand
         {
+            BeverageId = 1,
             Rating = new Rating(2),
             ReviewText = "This is some review text"
         };
@@ -44,5 +45,6 @@ public class CreateReviewTests
         item.Should().NotBeNull();
         item!.Rating.Should().Be(command.Rating);
         item.ReviewText.Should().Be(command.ReviewText);
+        item.BeverageId.Should().Be(command.BeverageId);
     }
 }

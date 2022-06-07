@@ -29,14 +29,14 @@ public class UpdateManufacturerTests
     public async Task ShouldUpdateManufacturer()
     {
         // Arrange
-        var created = await _testFixture.SendAsync(new CreateManufacturerCommand
+        var createdId = await _testFixture.SendAsync(new CreateManufacturerCommand
         {
             Name = "New Manufacturer"
         });
 
         var command = new UpdateManufacturerCommand
         {
-            Id = created.Id,
+            Id = createdId,
             Name = "Updated manufacturer name"
         };
 
@@ -44,7 +44,7 @@ public class UpdateManufacturerTests
         await _testFixture.SendAsync(command);
 
         // Assert
-        var item = await _testFixture.FindAsync<Manufacturer>(command.Id);
+        var item = await _testFixture.FindAsync<Manufacturer>(createdId);
 
         item.Should().NotBeNull();
         item!.Name.Should().Be(command.Name);

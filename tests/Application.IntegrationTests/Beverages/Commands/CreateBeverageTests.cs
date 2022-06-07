@@ -1,4 +1,4 @@
-﻿using Application.Beverages.Commands;
+﻿using Application.Beverages.Commands.Create;
 using Domain.Entities;
 using FluentAssertions;
 using FluentValidation;
@@ -28,18 +28,22 @@ public class CreateBeverageTests
     public async Task ShouldCreateBeverage()
     {
         // Arrange
+        var manufacturerId = 1;
+        var beverageName = "New Beverage";
         var command = new CreateBeverageCommand
         {
-            Name = "New Beverage"
+            ManufacturerId = manufacturerId,
+            Name = beverageName
         };
 
         // Act
         var result = await _testFixture.SendAsync(command);
 
         // Assert
-        var item = await _testFixture.FindAsync<Beverage>(result.Id);
+        var item = await _testFixture.FindAsync<Beverage>(result);
 
         item.Should().NotBeNull();
-        item!.Name.Should().Be(command.Name);
+        item!.Name.Should().Be(beverageName);
+        item.ManufacturerId.Should().Be(manufacturerId);
     }
 }

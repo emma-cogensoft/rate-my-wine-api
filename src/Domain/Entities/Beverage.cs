@@ -4,15 +4,18 @@ public class Beverage
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
+    public int ManufacturerId { get; set; }
     public Manufacturer? Manufacturer { get; set; }
 
     public Beverage() { }
-    public Beverage(int id, string name)
+
+    public Beverage(int id, string name, int manufacturerId)
     {
         Id = id;
         Name = name;
+        ManufacturerId = manufacturerId;
     }
-
+    
     public Beverage(int id, string name, Manufacturer? manufacturer)
     {
         Id = id;

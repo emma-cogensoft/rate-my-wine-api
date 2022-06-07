@@ -1,4 +1,5 @@
 ﻿using Api;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -19,20 +20,19 @@ public class TestFixture : IDisposable
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", true, true)
             .AddEnvironmentVariables();
-
-        var configuration = builder.Build();
-
-        var startup = new Startup(configuration);
-
+        
         var services = new ServiceCollection();
-
+        
         services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
             w.EnvironmentName == "Development" &&
             w.ApplicationName == "Api"));
 
         services.AddLogging();
 
+        var configuration = builder.Build();
+        var startup = new Startup(configuration);
         startup.ConfigureServices(services);
+        
 
         _scopeFactory = services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>();
 
@@ -96,6 +96,15 @@ public class TestFixture : IDisposable
 
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
+        
+        var manufacturer = context.Manufacturers.Add(new Manufacturer { Name = "Test Manufacturer" });
+        context.SaveChanges();
+        
+        var beverage = context.Beverages.Add(new Beverage { ManufacturerId = manufacturer.Entity.Id, Name = "Test Beverage" });
+        context.SaveChanges();
+        
+        context.Reviews.Add(new Review { Rating = 3, BeverageId = beverage.Entity.Id, ReviewText = "Some review text"});
+        context.SaveChanges();
     }
     
     [CollectionDefinition("Test fixture collection")]

@@ -37,7 +37,7 @@ public class CreateManufacturerTests
         var result = await _testFixture.SendAsync(command);
 
         // Assert
-        var item = await _testFixture.FindAsync<Manufacturer>(result.Id);
+        var item = await _testFixture.FindAsync<Manufacturer>(result);
 
         item.Should().NotBeNull();
         item!.Name.Should().Be(command.Name);

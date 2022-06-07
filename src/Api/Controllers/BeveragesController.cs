@@ -1,7 +1,9 @@
 using Application;
-using Application.Beverages.Commands;
-using Application.Beverages.Queries;
-using AutoMapper;
+using Application.Beverages.Commands.Create;
+using Application.Beverages.Commands.Delete;
+using Application.Beverages.Commands.Update;
+using Application.Beverages.Queries.GetById;
+using Application.Beverages.Queries.GetList;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,29 +15,27 @@ namespace Api.Controllers
     public class BeveragesController : ControllerBase
     {
         private readonly IMediator _mediatr;
-        private readonly IMapper _mapper;
 
-        public BeveragesController(IMediator mediatr, IMapper mapper)
+        public BeveragesController(IMediator mediatr)
         {
             _mediatr = mediatr;
-            _mapper = mapper;
         }
 
         // GET: api/Beverages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Beverage>>> GetBeverages()
         {
-            var beverages = await _mediatr.Send(new GetAllBeveragesQuery());
+            var beverages = await _mediatr.Send(new GetListBeveragesQuery());
             return beverages.ToList();
         }
 
         // GET: api/Beverages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Beverage>> GetBeverage(int id)
+        public async Task<ActionResult<BeverageDetailVm>> GetBeverage(int id)
         {
             try
             {
-                var beverage = await _mediatr.Send(_mapper.Map<GetBeverageByIdQuery>(id));
+                var beverage = await _mediatr.Send(new GetBeverageByIdQuery(id));
                 return beverage;
             }
             catch(EntityNotFoundException)
@@ -48,7 +48,7 @@ namespace Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBeverage(int id, UpdateBeverageCommand command)
         {
-            await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(command));
+            await _mediatr.Send(command);
             return NoContent();
         }
 
@@ -56,9 +56,9 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Beverage>> PostBeverage(CreateBeverageCommand command)
         {
-            var beverage = await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(command));
+            var beverageId = await _mediatr.Send(command);
 
-            return CreatedAtAction("GetBeverage", new { id = beverage.Id }, beverage);
+            return CreatedAtAction("GetBeverage", new { id = beverageId });
         }
 
         // DELETE: api/Beverages/5
@@ -67,7 +67,7 @@ namespace Api.Controllers
         {
             try
             {
-                await _mediatr.Send(_mapper.Map<DeleteBeverageCommand>(id));
+                await _mediatr.Send(new DeleteBeverageCommand(id));
             }
             catch (EntityNotFoundException)
             {

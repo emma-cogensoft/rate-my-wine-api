@@ -1,4 +1,5 @@
-﻿using Application.Beverages.Commands;
+﻿using Application.Beverages.Commands.Create;
+using Application.Beverages.Commands.Update;
 using Domain.Entities;
 using FluentAssertions;
 using FluentValidation;
@@ -28,14 +29,17 @@ public class UpdateBeverageTests
     public async Task ShouldUpdateBeverage()
     {
         // Arrange
-        var created = await _testFixture.SendAsync(new CreateBeverageCommand
+        var manufacturerId = 1;
+        var createdId = await _testFixture.SendAsync(new CreateBeverageCommand
         {
+            ManufacturerId = manufacturerId,
             Name = "New Beverage"
         });
 
         var command = new UpdateBeverageCommand
         {
-            Id = created.Id,
+            Id = createdId,
+            ManufacturerId = manufacturerId,
             Name = "Updated beverage name"
         };
 
