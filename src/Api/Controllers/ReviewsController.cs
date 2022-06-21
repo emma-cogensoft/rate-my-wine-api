@@ -26,7 +26,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
         {
-            var reviews = await _mediatr.Send(new GetAllReviewsQuery());
+            var reviews = await _mediatr.Send(new GetReviewsListQuery());
             return reviews.ToList();
 
         }

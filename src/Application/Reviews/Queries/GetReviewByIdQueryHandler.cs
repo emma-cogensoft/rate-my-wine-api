@@ -5,12 +5,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Reviews.Queries;
 
-public class GetReviewByIdHandler : IRequestHandler<GetReviewByIdQuery, Review>
+public class GetReviewByIdQueryHandler : IRequestHandler<GetReviewByIdQuery, Review>
 {
     private readonly IRateMyWineContext _context;
-    private readonly ILogger<GetReviewByIdHandler> _logger;
+    private readonly ILogger<GetReviewByIdQueryHandler> _logger;
 
-    public GetReviewByIdHandler(IRateMyWineContext context, ILogger<GetReviewByIdHandler> logger)
+    public GetReviewByIdQueryHandler(IRateMyWineContext context, ILogger<GetReviewByIdQueryHandler> logger)
     {
         _context = context;
         _logger = logger;

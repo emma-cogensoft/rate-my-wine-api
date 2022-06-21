@@ -6,12 +6,12 @@ using FluentValidation;
 
 namespace ApiTests.Reviews.Commands;
 
-[Collection("Test fixture collection")]
-public class CreateReviewTests
+[Collection("Commands Test fixture collection")]
+public class CreateReviewCommandTests
 {
     private readonly TestFixture _testFixture;
 
-    public CreateReviewTests(TestFixture testFixture)
+    public CreateReviewCommandTests(TestFixture testFixture)
     {
         _testFixture = testFixture;
     }

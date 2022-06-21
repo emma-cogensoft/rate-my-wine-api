@@ -15,17 +15,20 @@ public class TestFixture : IDisposable
 
     public TestFixture()
     {
+        Initialise();
+    }
+
+    private void Initialise()
+    {
         var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", true, true)
             .AddEnvironmentVariables();
 
         var configuration = builder.Build();
-
         var startup = new Startup(configuration);
 
         var services = new ServiceCollection();
-
         services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
             w.EnvironmentName == "Development" &&
             w.ApplicationName == "Api"));
@@ -36,7 +39,12 @@ public class TestFixture : IDisposable
 
         _scopeFactory = services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>();
 
-        EnsureDatabase();
+        CreateDatabase();
+        SeedDatabase();
+    }
+
+    private void SeedDatabase()
+    {
     }
 
     public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -87,8 +95,8 @@ public class TestFixture : IDisposable
 
         context.Database.EnsureDeleted();
     }
-    
-    private void EnsureDatabase()
+
+    private void CreateDatabase()
     {
         using var scope = _scopeFactory.CreateScope();
 
@@ -98,7 +106,7 @@ public class TestFixture : IDisposable
         context.Database.EnsureCreated();
     }
     
-    [CollectionDefinition("Test fixture collection")]
+    [CollectionDefinition("Commands Test fixture collection")]
     public class DatabaseCollection : ICollectionFixture<TestFixture>
     {
         // This class has no code, and is never created. Its purpose is simply

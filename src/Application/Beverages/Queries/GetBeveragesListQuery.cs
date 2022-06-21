@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Beverages.Queries;
 
-public class GetAllBeveragesQuery : IRequest<ICollection<Beverage>>
+public class GetBeveragesListQuery : IRequest<ICollection<Beverage>>
 {
 
 }

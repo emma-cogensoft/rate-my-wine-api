@@ -25,7 +25,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Beverage>>> GetBeverages()
         {
-            var beverages = await _mediatr.Send(new GetAllBeveragesQuery());
+            var beverages = await _mediatr.Send(new GetBeveragesListQuery());
             return beverages.ToList();
         }
 

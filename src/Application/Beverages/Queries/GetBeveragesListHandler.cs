@@ -5,18 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Beverages.Queries;
 
-public class GetBeveragesHandler : IRequestHandler<GetAllBeveragesQuery, ICollection<Beverage>>
+public class GetBeveragesListHandler : IRequestHandler<GetBeveragesListQuery, ICollection<Beverage>>
 {
     private readonly IRateMyWineContext _context;
-    private readonly ILogger<GetBeveragesHandler> _logger;
+    private readonly ILogger<GetBeveragesListHandler> _logger;
 
-    public GetBeveragesHandler(IRateMyWineContext context, ILogger<GetBeveragesHandler> logger)
+    public GetBeveragesListHandler(IRateMyWineContext context, ILogger<GetBeveragesListHandler> logger)
     {
         _context = context;
         _logger = logger;
     }
 
-    public async Task<ICollection<Beverage>> Handle(GetAllBeveragesQuery query, CancellationToken cancellationToken)
+    public async Task<ICollection<Beverage>> Handle(GetBeveragesListQuery query, CancellationToken cancellationToken)
     {
         var beverages = await _context.Beverages.ToListAsync(cancellationToken);
 

@@ -5,12 +5,12 @@ using FluentValidation;
 
 namespace ApiTests.Beverages.Commands;
 
-[Collection("Test fixture collection")]
-public class UpdateBeverageTests
+[Collection("Commands Test fixture collection")]
+public class CreateBeverageCommandTests
 {
     private readonly TestFixture _testFixture;
 
-    public UpdateBeverageTests(TestFixture testFixture)
+    public CreateBeverageCommandTests(TestFixture testFixture)
     {
         _testFixture = testFixture;
     }
@@ -18,32 +18,26 @@ public class UpdateBeverageTests
     [Fact]
     public async Task ShouldRequireMinimumFields()
     {
-        var command = new UpdateBeverageCommand();
+        var command = new CreateBeverageCommand();
 
         await FluentActions.Invoking(() =>
             _testFixture.SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
-    
+
     [Fact]
-    public async Task ShouldUpdateBeverage()
+    public async Task ShouldCreateBeverage()
     {
         // Arrange
-        var created = await _testFixture.SendAsync(new CreateBeverageCommand
+        var command = new CreateBeverageCommand
         {
             Name = "New Beverage"
-        });
-
-        var command = new UpdateBeverageCommand
-        {
-            Id = created.Id,
-            Name = "Updated beverage name"
         };
 
         // Act
-        await _testFixture.SendAsync(command);
+        var result = await _testFixture.SendAsync(command);
 
         // Assert
-        var item = await _testFixture.FindAsync<Beverage>(command.Id);
+        var item = await _testFixture.FindAsync<Beverage>(result.Id);
 
         item.Should().NotBeNull();
         item!.Name.Should().Be(command.Name);
