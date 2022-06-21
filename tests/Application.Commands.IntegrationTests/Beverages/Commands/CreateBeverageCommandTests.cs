@@ -5,12 +5,12 @@ using FluentValidation;
 
 namespace ApiTests.Beverages.Commands;
 
-[Collection("Test fixture collection")]
-public class CreateBeverageTests
+[Collection("Commands Test fixture collection")]
+public class CreateBeverageCommandTests
 {
     private readonly TestFixture _testFixture;
 
-    public CreateBeverageTests(TestFixture testFixture)
+    public CreateBeverageCommandTests(TestFixture testFixture)
     {
         _testFixture = testFixture;
     }
