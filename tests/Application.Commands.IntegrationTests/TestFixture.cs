@@ -1,4 +1,5 @@
 ﻿using Api;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ using Persistence;
 
 namespace ApiTests;
 
-public class TestFixture : IDisposable
+public class TestFixture
 {
     private static IServiceScopeFactory _scopeFactory = null!;
 
@@ -45,6 +46,25 @@ public class TestFixture : IDisposable
 
     private void SeedDatabase()
     {
+        const int numRecords = 40;
+        
+        for (var i = 1; i <= numRecords; i++)
+        {
+            Add(
+                new Manufacturer
+                {
+                    Id = i,
+                    Name = $"Test Manufacturer {i}"
+                });
+
+            Add(
+                new Beverage
+                {
+                    Id = i,
+                    Name = $"Test Beverage {i}",
+                    ManufacturerId = i
+                });
+        }
     }
 
     public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -65,6 +85,16 @@ public class TestFixture : IDisposable
 
         return await context.FindAsync<TEntity>(keyValues);
     }
+    
+    public TEntity? Find<TEntity>(params object[] keyValues)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
+
+        return context.Find<TEntity>(keyValues);
+    }
 
     public async Task AddAsync<TEntity>(TEntity entity)
         where TEntity : class
@@ -73,9 +103,21 @@ public class TestFixture : IDisposable
 
         var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
 
-        context.Add(entity);
+        await context.AddAsync(entity);
 
         await context.SaveChangesAsync();
+    }
+    
+    private void Add<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
+
+        context.Add(entity);
+
+        context.SaveChanges();
     }
 
     public async Task<int> CountAsync<TEntity>() where TEntity : class
@@ -85,15 +127,6 @@ public class TestFixture : IDisposable
         var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
 
         return await context.Set<TEntity>().CountAsync();
-    }
-
-    public void Dispose()
-    {
-        using var scope = _scopeFactory.CreateScope();
-
-        var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
-
-        context.Database.EnsureDeleted();
     }
 
     private void CreateDatabase()

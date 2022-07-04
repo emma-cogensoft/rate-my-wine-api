@@ -6,9 +6,9 @@ namespace Application.Reviews.Commands.Update;
 
 public class UpdateReviewCommand : IRequest<Review>
 {
-    public int Id { get; set; }
-    public int UserId { get; set; }
-    public int BeverageId { get; set; }
-    public string ReviewText { get; set; } = string.Empty;
-    public Rating Rating { get; set; } = new(-1);
+    public int Id { get; init; }
+    public int UserId { get; init; }
+    public int BeverageId { get; init; }
+    public string ReviewText { get; init; } = string.Empty;
+    public Rating Rating { get; init; } = new(-1);
 }

@@ -18,7 +18,11 @@ public class GetListBeveragesQueryHandler : IRequestHandler<GetListBeveragesQuer
 
     public async Task<ICollection<Beverage>> Handle(GetListBeveragesQuery query, CancellationToken cancellationToken)
     {
-        var beverages = await _context.Beverages.ToListAsync(cancellationToken);
+        var beverages = 
+            await _context
+            .Beverages
+            .Include(b => b.Manufacturer)
+            .ToListAsync(cancellationToken);
 
         return beverages;
     }

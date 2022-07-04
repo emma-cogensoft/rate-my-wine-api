@@ -1,6 +1,9 @@
 using Application;
-using Application.Beverages.Commands;
-using Application.Beverages.Queries;
+using Application.Beverages.Commands.Create;
+using Application.Beverages.Commands.Delete;
+using Application.Beverages.Commands.Update;
+using Application.Beverages.Queries.GetById;
+using Application.Beverages.Queries.GetList;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -25,7 +28,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Beverage>>> GetBeverages()
         {
-            var beverages = await _mediatr.Send(new GetBeveragesListQuery());
+            var beverages = await _mediatr.Send(new GetListBeveragesQuery());
             return beverages.ToList();
         }
 
@@ -36,7 +39,7 @@ namespace Api.Controllers
             try
             {
                 var beverage = await _mediatr.Send(_mapper.Map<GetBeverageByIdQuery>(id));
-                return beverage;
+                return Ok(beverage);
             }
             catch(EntityNotFoundException)
             {
@@ -56,9 +59,9 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Beverage>> PostBeverage(CreateBeverageCommand command)
         {
-            var beverage = await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(command));
+            var beverageId = await _mediatr.Send(_mapper.Map<CreateBeverageCommand>(command));
 
-            return CreatedAtAction("GetBeverage", new { id = beverage.Id }, beverage);
+            return CreatedAtAction("GetBeverage", new { id = beverageId }, beverageId);
         }
 
         // DELETE: api/Beverages/5

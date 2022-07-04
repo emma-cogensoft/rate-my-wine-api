@@ -10,7 +10,7 @@ using Persistence;
 
 namespace ApiTests;
 
-public class TestFixture : IDisposable
+public class TestFixture
 {
     private static IServiceScopeFactory _scopeFactory = null!;
 
@@ -41,7 +41,7 @@ public class TestFixture : IDisposable
         _scopeFactory = services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>();
 
         CreateDatabase();
-        Task.Run(SeedDatabase);
+        SeedDatabase();
     }
 
     public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -53,6 +53,16 @@ public class TestFixture : IDisposable
         return await mediator.Send(request);
     }
 
+    public TEntity? Find<TEntity>(params object[] keyValues)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
+
+        return context.Find<TEntity>(keyValues);
+    }
+    
     public async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
         where TEntity : class
     {
@@ -70,9 +80,21 @@ public class TestFixture : IDisposable
 
         var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
 
-        context.Add(entity);
+        await context.AddAsync(entity);
 
         await context.SaveChangesAsync();
+    }
+    
+    private void Add<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
+
+        context.Add(entity);
+
+        context.SaveChanges();
     }
 
     public async Task<int> CountAsync<TEntity>() where TEntity : class
@@ -83,36 +105,8 @@ public class TestFixture : IDisposable
 
         return await context.Set<TEntity>().CountAsync();
     }
-
-    public void Dispose()
-    {
-        using var scope = _scopeFactory.CreateScope();
-
-        var context = scope.ServiceProvider.GetRequiredService<RateMyWineContext>();
-
-        context.Database.EnsureDeleted();
-    }
     
-    private async Task SeedDatabase()
-    {
-        var numRecords = 40;
- 
-        for (var i = 0; i < numRecords; i++)
-        {
-            await AddAsync<Beverage>(new Beverage
-            {
-                Id = i,
-                Name = $"Test Beverage {i}",
-                Manufacturer = new Manufacturer
-                {
-                    Id = i,
-                    Name = $"Test Manufacturer {i}"
-                }
-            });
-        }
-    }
-
-    private void CreateDatabase()
+    private static void CreateDatabase()
     {
         using var scope = _scopeFactory.CreateScope();
 
@@ -121,6 +115,61 @@ public class TestFixture : IDisposable
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
     }
+            
+    private void SeedDatabase()
+    {
+        const int numRecords = 40;
+        
+        for (var i = 1; i <= numRecords; i++)
+        {
+            Add(
+                new Manufacturer
+                {
+                    Id = i,
+                    Name = $"Test Manufacturer {i}"
+                });
+
+            Add(
+                new Beverage
+                {
+                    Id = i,
+                    Name = $"Test Beverage {i}",
+                    ManufacturerId = i
+                });
+        }
+    }
+        
+    private async Task SeedDatabaseAsync()
+    {
+        const int numRecords = 40;
+        
+        var createManufacturers = new List<Task>();
+        for (var i = 1; i <= numRecords; i++)
+        {
+            createManufacturers.Add(AddAsync(
+                new Manufacturer
+                {
+                    Id = i,
+                    Name = $"Test Manufacturer {i}"
+                }));
+        }
+        await Task.WhenAll(createManufacturers);
+        
+        var createBeverages = new List<Task>();
+        for (var i = 1; i <= numRecords; i++)
+        {
+            createBeverages.Add(AddAsync(
+                new Beverage
+                {
+                    Id = i,
+                    Name = $"Test Beverage {i}",
+                    ManufacturerId = i,
+                    Manufacturer = await FindAsync<Manufacturer>(i)
+                }));
+        }
+
+        await Task.WhenAll(createBeverages);
+    }
     
     [CollectionDefinition("Queries Test fixture collection")]
     public class DatabaseCollection : ICollectionFixture<TestFixture>
@@ -128,5 +177,13 @@ public class TestFixture : IDisposable
         // This class has no code, and is never created. Its purpose is simply
         // to be the place to apply [CollectionDefinition] and all the
         // ICollectionFixture<> interfaces.
+    }
+    
+    public RateMyWineContext GetMemoryContext()
+    {
+        var options = new DbContextOptionsBuilder<RateMyWineContext>()
+            .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+            .Options;
+        return new RateMyWineContext(options);
     }
 }

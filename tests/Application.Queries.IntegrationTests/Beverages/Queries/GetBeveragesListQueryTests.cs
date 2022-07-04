@@ -1,4 +1,4 @@
-﻿using Application.Beverages.Queries;
+﻿using Application.Beverages.Queries.GetList;
 using Domain.Entities;
 using FluentAssertions;
 
@@ -18,7 +18,7 @@ public class GetBeveragesListQueryTests
     public async Task ShouldGetAllBeverages()
     {
         // Arrange
-        var query = new GetBeveragesListQuery();
+        var query = new GetListBeveragesQuery();
 
         // Act
         var result = await _testFixture.SendAsync(query);
@@ -27,8 +27,9 @@ public class GetBeveragesListQueryTests
         var expectedCount = await _testFixture.CountAsync<Beverage>();
         expectedCount.Should().Be(expectedCount);
         
-        result.Select(r => r.Id).Distinct().Count().Should().Be(expectedCount);
-        result.Select(r => r.Name).Distinct().Count().Should().Be(expectedCount);
-        result.Select(r => r.Manufacturer).Distinct().Count().Should().Be(expectedCount);
+        result.Select(b => b.Id).Distinct().Count().Should().Be(expectedCount);
+        result.Select(b => b.Name).Distinct().Count().Should().Be(expectedCount);
+        result.Select(b => b.ManufacturerId).Distinct().Count().Should().Be(expectedCount);
+        result.Select(b => b.Manufacturer).Distinct().Count().Should().Be(expectedCount);
     }
 }

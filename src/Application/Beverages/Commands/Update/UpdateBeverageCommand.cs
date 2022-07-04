@@ -5,7 +5,7 @@ namespace Application.Beverages.Commands.Update;
 
 public class UpdateBeverageCommand : IRequest<Beverage>
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public int ManufacturerId { get; set; }
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public int ManufacturerId { get; init; }
 }
