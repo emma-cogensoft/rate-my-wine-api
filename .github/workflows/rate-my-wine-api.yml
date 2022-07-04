@@ -15,8 +15,8 @@ env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: src\Api
-  INTEGRATION_TEST_PROJECT: tests\Application.IntegrationTests
-  UNIT_TEST_PROJECT: tests\Application.UnitTests
+  INTEGRATION_TEST_COMMANDS_PROJECT: tests\Application.Commands.IntegrationTests
+  INTEGRATION_TEST_QUERIES_PROJECT: tests\Application.Queries.IntegrationTests
 
 jobs:
   build:
@@ -33,15 +33,15 @@ jobs:
 
       - name: Restore
         run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
-      
+
       - name: Build with dotnet
         run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-  
-      - name: Integration Tests
-        run: dotnet test "${{ env.INTEGRATION_TEST_PROJECT }}" --no-build
 
-      - name: Unit Tests
-        run: dotnet test "${{ env.UNIT_TEST_PROJECT }}" --no-build
+      - name: Integration Tests (Commands)
+        run: dotnet test "${{ env.INTEGRATION_TEST_COMMANDS_PROJECT }}" --no-build
+
+      - name: Integration Tests (Queries)
+        run: dotnet test "${{ env.INTEGRATION_TEST_QUERIES_PROJECT }}" --no-build
 
       - name: dotnet publish
         run: dotnet publish "${{ env.WORKING_DIRECTORY }}" -c ${{ env.CONFIGURATION }} -o ${{env.DOTNET_ROOT}}/myapp --no-build
