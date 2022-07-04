@@ -5,7 +5,7 @@ namespace Application.Manufacturers.Commands.Update;
 
 public class UpdateManufacturerCommand : IRequest<Manufacturer>
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
     public Manufacturer Manufacturer { get; set; } = new Manufacturer();
 }

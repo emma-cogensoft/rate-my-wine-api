@@ -1,5 +1,4 @@
-﻿using Application.Manufacturers.Queries;
-using Application.Manufacturers.Queries.GetList;
+﻿using Application.Manufacturers.Queries.GetList;
 using Domain.Entities;
 using FluentAssertions;
 
@@ -19,7 +18,7 @@ public class GetManufacturersListQueryTests
     public async Task ShouldGetAllManufacturers()
     {
         // Arrange
-        var query = new GetManufacturersListQuery();
+        var query = new GetListManufacturersQuery();
 
         // Act
         var result = await _testFixture.SendAsync(query);

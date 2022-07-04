@@ -20,6 +20,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
         var review = new Review
         {
             BeverageId = command.BeverageId,
+            Beverage = await _context.Beverages.FindAsync(command.BeverageId),
             Rating = command.Rating,
             ReviewText = command.ReviewText,
             UserId = command.UserId
